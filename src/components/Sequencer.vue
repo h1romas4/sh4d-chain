@@ -74,6 +74,7 @@ function setMIDISetting(outputDeviceId, inputDeviceId, pcChannelNo, pcMSBNm, pcL
   midiOutputChannel = outputDevice.channels[pcChannel]
   pcMSB = pcMSBNm;
   pcLSB = pcLSBNm;
+  inputDevice.removeListener()
   inputDevice.addListener("clock", onMIDIClock) // 0xf8
   inputDevice.addListener("start", onMIDIStart) // 0xfa
   inputDevice.addListener("stop", onMIDIStop) // 0xfc
