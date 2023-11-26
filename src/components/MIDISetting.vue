@@ -152,6 +152,18 @@ function detectDevice(manufacturer, list, model) {
   model.value = list.value[index].id
   return true
 }
+
+/**
+ * onSaveChange
+ */
+function onSaveChange() {
+  emit('save-and-change',
+    midiInputDevice.value,
+    midiOutputDevice.value,
+    outputChannel.value,
+    pcMSB.value,
+    pcLSB.value)
+}
 </script>
 
 <template>
@@ -216,6 +228,7 @@ function detectDevice(manufacturer, list, model) {
     </button>
     <button
       v-bind:disabled="disabledMIDI || props.isBusy"
+      v-on:click="onSaveChange()"
       class="btn btn-primary me-3"
       type="button">
       Save & Change
