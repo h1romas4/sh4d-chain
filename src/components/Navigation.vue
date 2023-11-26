@@ -13,7 +13,7 @@ defineProps([
 <ul class="nav nav-tabs mb-4" role="tablist">
   <li class="nav-item" role="presentation">
     <button class="nav-link"
-      :class="{ active: activeTab === 'sequencer' }"
+      v-bind:class="{ active: activeTab === 'sequencer' }"
       data-bs-toggle="tab"
       data-bs-target="#sequencerTab"
       type="button"
@@ -23,7 +23,7 @@ defineProps([
   </li>
   <li class="nav-item" role="presentation">
     <button class="nav-link"
-      :class="{ active: activeTab === 'midi' }"
+      v-bind:class="{ active: activeTab === 'midi' }"
       data-bs-toggle="tab"
       data-bs-target="#midiTab"
       type="button"
