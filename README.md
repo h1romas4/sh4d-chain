@@ -1,5 +1,9 @@
 # Pattern Chainer for Roland SH-4d
 
+## Usage
+
+[https://h1romas4.github.io/sh4d-chain/](https://h1romas4.github.io/sh4d-chain/)
+
 ## Devel
 
 ```
