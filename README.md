@@ -4,8 +4,17 @@
 
 ## Usage
 
+### Web Browser
+
 Requires a Chromium-based browser such as Microsoft Edge for Web MIDI API.
 I have checked the security policy to make sure it works with Firefox.
+
+### SH-4d
+
+- SYSTEM SETTINGS - TEMPO/SYNC - Sync Out - USB
+- SYSTEM SETTINGS - MIDI - Ctrl Ch - 16
+
+### Link to application
 
 [https://h1romas4.github.io/sh4d-chain/](https://h1romas4.github.io/sh4d-chain/)
 
