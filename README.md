@@ -4,7 +4,14 @@
 
 ## Usage
 
+Requires a Chromium-based browser such as Microsoft Edge for Web MIDI API.
+I have checked the security policy to make sure it works with Firefox.
+
 [https://h1romas4.github.io/sh4d-chain/](https://h1romas4.github.io/sh4d-chain/)
+
+[![](https://github.com/h1romas4/sh4d-chain/raw/main/assets/images/sh4d-chain-01.png)](https://h1romas4.github.io/sh4d-chain/)
+
+[![](https://github.com/h1romas4/sh4d-chain/raw/main/assets/images/sh4d-chain-02.png)](https://h1romas4.github.io/sh4d-chain/)
 
 ## Demo
 
