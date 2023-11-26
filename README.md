@@ -31,12 +31,24 @@ Requires a Chromium-based browser such as Microsoft Edge for Web MIDI API.
 
 ## Develop
 
+**Local**
+
 ```
 git clone https://github.com/h1romas4/sh4d-chain
 cd sh4d-chain
 npm install
 npm run dev
 ```
+
+**Deploy**
+
+```
+# "--base" for GitHub Pages context path
+# This is not necessary when deployed as root.
+npm run build -- --base=/sh4d-chain
+# ls -laF dist/
+```
+
 ## License
 
 MIT License

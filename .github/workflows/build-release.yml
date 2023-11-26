@@ -20,6 +20,5 @@ jobs:
     - name: Build
       run: |
         npm install
-        npm run build
-        npm run build -- --base=/sh4d-chain # base for github page
+        npm run build -- --base=/sh4d-chain # base for github page context path
         ls -laF dist/
