@@ -1,0 +1,25 @@
+name: Build-Release
+
+on:
+  workflow_call:
+    inputs:
+      release:
+        description: 'release'
+        type: boolean
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        submodules: recursive
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build
+      run: |
+        npm install
+        npm run build
+        npm run build -- --base=/sh4d-chain # base for github page
+        ls -laF dist/
