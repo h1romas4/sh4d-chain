@@ -103,7 +103,7 @@ function onNotifyBusyState(state) {
         v-bind:isBusy="isBusy"
         v-on:detectMidi="onDetectMidi"
         v-on:saveAndChange="onSaveAndChange"
-        defaultManufacturer="Roland"
+        defaultDeviceName="SH-4d"
       />
     </div>
   </div>

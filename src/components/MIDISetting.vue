@@ -13,7 +13,7 @@ const $webmidi = getCurrentInstance().appContext.config.globalProperties.$webmid
  */
 const props = defineProps([
   'isBusy',
-  'defaultManufacturer',
+  'defaultDeviceName',
 ])
 
 /**
@@ -61,11 +61,11 @@ function configure() {
   let message = ""
   if(setDefaultSetting()) {
     const detectInput = detectDevice(
-      props.defaultManufacturer,
+      props.defaultDeviceName,
       midiInputList,
       midiInputDevice)
     const detectOutput = detectDevice(
-      props.defaultManufacturer,
+      props.defaultDeviceName,
       midiOutputList,
       midiOutputDevice)
     if(detectInput && detectOutput) {
@@ -136,15 +136,15 @@ function importMIDIDevice(devices, list, model) {
 }
 
 /**
- * Detect device by manufacturer
+ * Detect device by name
  *
- * @param {*} manufacturer
+ * @param {*} name
  * @param {*} list
  * @param {*} model
  */
-function detectDevice(manufacturer, list, model) {
+function detectDevice(name, list, model) {
   let index = list.value.findIndex(device =>
-    device.manufacturer === manufacturer
+    device.name === name
   )
   if(index == -1) {
     return false
@@ -173,7 +173,7 @@ function onSaveChange() {
       <option
         v-for="device in midiInputList"
         v-bind:value="device.id">
-        {{ device.manufacturer }} {{ device.name }}
+        {{ device.name }}
       </option>
     </select>
   </div>
@@ -185,7 +185,7 @@ function onSaveChange() {
       <option
         v-for="device in midiOutputList"
         v-bind:value="device.id">
-        {{ device.manufacturer }} {{ device.name }}
+        {{ device.name }}
       </option>
     </select>
   </div>
