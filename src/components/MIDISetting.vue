@@ -144,7 +144,7 @@ function importMIDIDevice(devices, list, model) {
  */
 function detectDevice(name, list, model) {
   let index = list.value.findIndex(device =>
-    device.name === name
+    device.name.startsWith(name)
   )
   if(index == -1) {
     return false
