@@ -50,7 +50,7 @@ onMounted(() => {
 /**
  * Internal State
  */
-const clockQuarterNote = 24 // MIDI cleck - 4 beat per 24 tick
+const clockQuarterNote = 24 // MIDI clock - 4 beat per 24 tick
 const defaultPattern = { bank: 8, no: 1, scale: 16, step: 64 }
 let outputDevice = null
 let inputDevice = null
