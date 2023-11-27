@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 import Navigation from './components/Navigation.vue'
 import Sequencer from './components/Sequencer.vue'
 import MIDISetting from './components/MIDISetting.vue'
@@ -16,6 +16,8 @@ const toolTipMIDITab = ref("Detecting..")
 const toolTipColorMIDITab = ref("success")
 const isBusy = ref(null)
 const sequencer = ref(null) // refs
+const saveStateSequencer = reactive([])
+const saveStateMIDISetting = reactive({})
 
 /**
  * Vue Event
@@ -30,7 +32,7 @@ onMounted(async () => {
  * @param {bool} status
  * @param {String} message
  */
-function onDetectMidi(status, message) {
+function onDetectMIDI(status, message) {
   toastMessageHead.value = "MIDI Setting"
   if(message) {
     toolTipMIDITab.value = "Connected"
@@ -106,6 +108,7 @@ function onNotifyBusyState(state) {
       role="tabpanel">
       <Sequencer
         ref="sequencer"
+        v-bind:saveState="saveStateSequencer"
         v-on:notifyBusyState="onNotifyBusyState"
         v-on:saveAndChange="onSequenceSaveAndChange"
       />
@@ -119,7 +122,8 @@ function onNotifyBusyState(state) {
       role="tabpanel">
       <MIDISetting
         v-bind:isBusy="isBusy"
-        v-on:detectMidi="onDetectMidi"
+        v-bind:saveState="saveStateMIDISetting"
+        v-on:detectMidi="onDetectMIDI"
         v-on:saveAndChange="onMIDISaveAndChange"
         defaultDeviceName="SH-4d"
       />

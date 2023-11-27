@@ -14,6 +14,7 @@ const $webmidi = getCurrentInstance().appContext.config.globalProperties.$webmid
 const props = defineProps([
   'isBusy',
   'defaultDeviceName',
+  'saveState',
 ])
 
 /**

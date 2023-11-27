@@ -8,6 +8,13 @@ import { ref, onMounted, getCurrentInstance, reactive } from 'vue'
 const $webmidi = getCurrentInstance().appContext.config.globalProperties.$webmidi
 
 /**
+ * Vue Component Props
+ */
+const props = defineProps([
+  'saveState',
+])
+
+/**
  * Vue State
  */
 const isPlaying = ref(false)
