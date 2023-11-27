@@ -15,11 +15,13 @@ const nowPatternIndex = ref(null)
 const nextPatternIndex = ref(null)
 const bpm = ref(0)
 const quarterBeat = ref(false)
-const addPatternBank = ref(false)
-const addPatternNo = ref(false)
-const addPatternStep = ref(false)
+const addPatternBank = ref(null)
+const addPatternNo = ref(null)
+const addPatternStep = ref(null)
+const addPatternScale = ref(null)
 const patternBankList = ref([])
 const patternNoList = ref([])
+const patternScaleList = ref([])
 const sequence = reactive([])
 
 /**
@@ -47,7 +49,7 @@ onMounted(() => {
  * Internal State
  */
 const clockQuarterNote = 24 // MIDI cleck - 4 beat per 24 tick
-const defaultPattern = { patternBank: 8, patternNo: 1, setp: 64 }
+const defaultPattern = { patternBank: 8, patternNo: 1, scale: 16, step: 64 }
 let outputDevice = null
 let inputDevice = null
 let pcChannel = null
@@ -96,7 +98,7 @@ function onMIDIClock(event) {
     }
   }
   // beat
-  nextPattern(midiClock, 16 /* TODO: fixed 16beat */)
+  nextPattern(midiClock)
   // midi clock
   midiClock++
   if(midiClock >= clockQuarterNote) {
@@ -112,7 +114,7 @@ function onMIDIClock(event) {
  * @param {*} midiClock
  * @param {*} scale
  */
-function nextPattern(midiClock, scale) {
+function nextPattern(midiClock) {
   if(nowPatternIndex.value == null) {
     return
   }
@@ -128,6 +130,7 @@ function nextPattern(midiClock, scale) {
     sequence[nowPatternIndex.value].nextPCed = true
   }
   // step count
+  const scale = sequence[nowPatternIndex.value].scale
   if(((midiClock + 1) % (clockQuarterNote / (scale / 4))) == 0) {
     sequence[nowPatternIndex.value].now++
   }
@@ -191,6 +194,7 @@ function onAddPattern() {
   sequence.push({
     bank: addPatternBank.value,
     no: addPatternNo.value,
+    scale: addPatternScale.value,
     step: addPatternStep.value,
     now: 0,
     nextPCed: false,
@@ -221,7 +225,8 @@ function onDebug() {
 function defaultValue() {
   addPatternBank.value = defaultPattern.patternBank
   addPatternNo.value = defaultPattern.patternNo
-  addPatternStep.value = defaultPattern.setp
+  addPatternScale.value = defaultPattern.scale
+  addPatternStep.value = defaultPattern.step
   for(let i = 1; i <=9; i++) {
     patternBankList.value.push({
       value: i,
@@ -234,6 +239,12 @@ function defaultValue() {
       viewValue: `${i}`.padStart(2, 0)
     })
   }
+  patternScaleList.value = [
+    { name: "1/4", value: 4 },
+    { name: "1/8", value: 8 },
+    { name: "1/16", value: 16 },
+    { name: "1/32", value: 32 },
+  ]
 }
 </script>
 
@@ -323,7 +334,16 @@ function defaultValue() {
               {{ pattern.viewValue }}
             </option>
           </select>
-          <div class="input-group-text">Step (16)</div>
+          <div class="input-group-text">Step</div>
+            <select
+            v-model="seq.scale"
+            class="form-select">
+            <option
+              v-for="scale in patternScaleList"
+              v-bind:value="scale.value">
+              {{ scale.name }}
+            </option>
+          </select>
           <input
             v-model="seq.step"
             type="number"
@@ -375,7 +395,16 @@ function defaultValue() {
             {{ pattern.viewValue }}
           </option>
         </select>
-        <div class="input-group-text">Step (16)</div>
+        <div class="input-group-text">Step</div>
+        <select
+          v-model="addPatternScale"
+          class="form-select">
+          <option
+            v-for="scale in patternScaleList"
+            v-bind:value="scale.value">
+            {{ scale.name }}
+          </option>
+        </select>
         <input
           v-model="addPatternStep"
           type="number"
