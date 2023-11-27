@@ -51,7 +51,7 @@ onMounted(() => {
  * Internal State
  */
 const clockQuarterNote = 24 // MIDI cleck - 4 beat per 24 tick
-const defaultPattern = { patternBank: 8, patternNo: 1, scale: 16, step: 64 }
+const defaultPattern = { bank: 8, no: 1, scale: 16, step: 64 }
 let outputDevice = null
 let inputDevice = null
 let pcChannel = null
@@ -203,7 +203,7 @@ function onAddPattern() {
   })
   addPatternNo.value++
   if(addPatternNo.value > 16) {
-    addPatternNo.value = defaultPattern.patternNo
+    addPatternNo.value = defaultPattern.no
   }
 }
 
@@ -222,6 +222,7 @@ function onRemovePattern(index) {
  */
 function onClear() {
   sequence.splice(0, sequence.length);
+  addPatternNo.value = defaultPattern.no
 }
 
 /**
@@ -242,8 +243,8 @@ function onDebug() {
  * defaultValue
  */
 function defaultValue() {
-  addPatternBank.value = defaultPattern.patternBank
-  addPatternNo.value = defaultPattern.patternNo
+  addPatternBank.value = defaultPattern.bank
+  addPatternNo.value = defaultPattern.no
   addPatternScale.value = defaultPattern.scale
   addPatternStep.value = defaultPattern.step
   for(let i = 1; i <=9; i++) {
