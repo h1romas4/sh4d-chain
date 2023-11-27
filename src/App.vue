@@ -17,13 +17,26 @@ const toolTipColorMIDITab = ref("success")
 const isBusy = ref(null)
 const sequencer = ref(null) // refs
 const saveStateSequencer = reactive([])
-const saveStateMIDISetting = reactive({})
+const saveStateMIDISetting = reactive({
+  outputDeviceId: null,
+  inputDeviceId: null,
+  pcChannel: null,
+  pcMSB: null,
+  pcLSB: null,
+})
 
 /**
  * Vue Event
  */
 onMounted(async () => {
   isBusy.value = false
+  // set default sequence save state
+  for(let i = 0; i < 4; i++) {
+    saveStateSequencer.push({
+      name: `Song ${i + 1}`,
+      sequence: null,
+    })
+  }
 })
 
 /**
@@ -68,19 +81,28 @@ function onMIDISaveAndChange(outputDeviceId, inputDeviceId, pcChannel, pcMSB, pc
     toastMessageHead.value = "MIDI Setting"
     toastMessageBody.value = "Setting complited"
     new Toast(toastMessage.value).show()
+    // MIDI setting save state
+    saveStateMIDISetting.outputDeviceId = outputDeviceId
+    saveStateMIDISetting.inputDeviceId = inputDeviceId
+    saveStateMIDISetting.pcChannel = pcChannel
+    saveStateMIDISetting.pcMSB = pcMSB
+    saveStateMIDISetting.pcLSB = pcLSB
   }
 }
 
 /**
  * Vue Emets (from Sequencer)
  *
+ * @param {*} index
  * @param {*} sequence
  */
-function onSequenceSaveAndChange(sequence) {
-  console.log(sequence)
+function onSequenceSaveAndChange(index, sequence) {
+  saveStateSequencer[index].sequence = sequence
   toastMessageHead.value = "Sequencer"
-  // toastMessageBody.value = "Save complited"
-  toastMessageBody.value = "Sorry, not implimented yet!"
+  toastMessageBody.value = "Save complited."
+  if(sequence === null) {
+    toastMessageBody.value = "Save cleard."
+  }
   new Toast(toastMessage.value).show()
 }
 

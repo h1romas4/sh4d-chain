@@ -45,7 +45,6 @@ const patternBankList = ref([])
 const patternNoList = ref([])
 const patternScaleList = ref([])
 const sequence = reactive([])
-const saveSequence = reactive([])
 
 /**
  * Vue Event
@@ -248,16 +247,53 @@ function onClear() {
 
 /**
  * onSave
+ *
+ * @param {*} index
  */
-function onSave() {
-  emit("save-and-change", sequence)
+function onSave(index) {
+  let serial = []
+  if(sequence.length > 0) {
+    // serialize
+    for(let i = 0; i < sequence.length; i++) {
+      const seq = sequence[i]
+      serial.push({
+        bank: seq.bank,
+        no: seq.no,
+        scale: seq.scale,
+        step: seq.step,
+        now: 0,
+        nextPCed: false,
+      })
+    }
+  } else {
+    serial = null
+  }
+  emit("save-and-change", index, serial)
 }
 
 /**
  * onLoad
+ *
+ * @param {*} index
  */
- function onLoad() {
-  emit("save-and-change", sequence)
+ function onLoad(index) {
+  const saveState = props.saveState
+  if(saveState[index] && saveState[index].sequence != null) {
+    onClear()
+    for(let i = 0; i < saveState[index].sequence.length; i++) {
+      const seq = saveState[index].sequence[i]
+      // deserialize
+      sequence.push({
+        bank: seq.bank,
+        no: seq.no,
+        scale: seq.scale,
+        step: seq.step,
+        now: 0,
+        nextPCed: false,
+      })
+    }
+  }
+  pcFirstStep()
 }
 
 /**
@@ -340,64 +376,41 @@ function defaultValue() {
     <div class="col-3">
       <div class="btn-group me-2" role="group">
         <button
-          v-bind:disabled="isPlaying || sequence.length == 0"
+          v-bind:disabled="isPlaying"
           class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown"
           type="button">
           <b class="bi bi-box-arrow-up-left me-1"></b>
           Save
         </button>
         <ul class="dropdown-menu">
-          <li><a
-            v-on:click="onSave"
-            class="dropdown-item" href="#">
-            Song 1
-          </a></li>
-          <li><a
-            v-on:click="onSave"
-            class="dropdown-item" href="#">
-            Song 2
-          </a></li>
-          <li><a
-            v-on:click="onSave"
-            class="dropdown-item" href="#">
-            Song 3
-          </a></li>
-          <li><a
-            v-on:click="onSave"
-            class="dropdown-item" href="#">
-            Song 4
-          </a></li>
+          <li v-for="(seq, index) in saveState">
+            <a
+              v-on:click="onSave(index)"
+              class="dropdown-item"
+              href="#">
+              {{ seq.name }}
+            </a>
+          </li>
         </ul>
       </div>
       <div class="btn-group me-2" role="group">
         <button
-          v-bind:disabled="isPlaying"
+          v-bind:disabled="isPlaying || saveState.every((state) => state.sequence === null)"
           class="btn btn-outline-primary outline dropdown-toggle" data-bs-toggle="dropdown"
           type="button">
-          <b class="bi bi-box-arrow-up-left me-1"></b>
+          <b class="bi bi-box-arrow-in-down-right me-1"></b>
           Load
         </button>
         <ul class="dropdown-menu">
-          <li><a
-            v-on:click="onLoad"
-            class="dropdown-item" href="#">
-            Song 1
-          </a></li>
-          <li><a
-            v-on:click="onLoad"
-            class="dropdown-item" href="#">
-            Song 2
-          </a></li>
-          <li><a
-            v-on:click="onLoad"
-            class="dropdown-item" href="#">
-            Song 3
-          </a></li>
-          <li><a
-            v-on:click="onLoad"
-            class="dropdown-item" href="#">
-            Song 4
-          </a></li>
+          <li v-for="(seq, index) in saveState">
+            <a
+              v-on:click="onLoad(index)"
+              class="dropdown-item"
+              v-bind:class="{ 'disabled': seq.sequence == null }"
+              href="#">
+              {{ seq.name }}
+            </a>
+          </li>
         </ul>
       </div>
       <button
