@@ -26,17 +26,25 @@ const saveStateMIDISetting = reactive({
 })
 
 /**
+ * Internal
+ */
+const STORAGE_KEY_SONG = "Song" + " "
+const STORAGE_KEY_SETTING = "Setting"
+const MAX_SONG_SIZE = 4
+
+/**
  * Vue Event
  */
 onMounted(async () => {
   isBusy.value = false
   // set default sequence save state
-  for(let i = 0; i < 4; i++) {
+  for(let i = 0; i < MAX_SONG_SIZE; i++) {
     saveStateSequencer.push({
-      name: `Song ${i + 1}`,
+      name: `${STORAGE_KEY_SONG}${i + 1}`,
       sequence: null,
     })
   }
+  loadState()
 })
 
 /**
@@ -81,12 +89,16 @@ function onMIDISaveAndChange(outputDeviceId, inputDeviceId, pcChannel, pcMSB, pc
     toastMessageHead.value = "MIDI Setting"
     toastMessageBody.value = "Setting complited"
     new Toast(toastMessage.value).show()
-    // MIDI setting save state
-    saveStateMIDISetting.outputDeviceId = outputDeviceId
-    saveStateMIDISetting.inputDeviceId = inputDeviceId
-    saveStateMIDISetting.pcChannel = pcChannel
-    saveStateMIDISetting.pcMSB = pcMSB
-    saveStateMIDISetting.pcLSB = pcLSB
+    // store local storage
+    if(window.localStorage) {
+      localStorage.setItem(STORAGE_KEY_SETTING, JSON.stringify({
+        outputDeviceId,
+        inputDeviceId,
+        pcChannel,
+        pcMSB,
+        pcLSB,
+      }));
+    }
   }
 }
 
@@ -103,6 +115,15 @@ function onSequenceSaveAndChange(index, sequence) {
   if(sequence === null) {
     toastMessageBody.value = "Save cleard."
   }
+  // store local storage
+  if(window.localStorage) {
+    const key = `${STORAGE_KEY_SONG}${index + 1}`
+    if(sequence !== null) {
+      localStorage.setItem(key, JSON.stringify(sequence));
+    } else {
+      localStorage.removeItem(key);
+    }
+  }
   new Toast(toastMessage.value).show()
 }
 
@@ -113,6 +134,30 @@ function onSequenceSaveAndChange(index, sequence) {
  */
 function onNotifyBusyState(state) {
   isBusy.value = state
+}
+
+/**
+ * loadState
+ */
+function loadState() {
+  if(!window.localStorage) return
+  // MIDI Setting
+  const setting = JSON.parse(localStorage.getItem(STORAGE_KEY_SETTING))
+  if(setting !== null) {
+    saveStateMIDISetting.outputDeviceId = setting['outputDeviceId']
+    saveStateMIDISetting.inputDeviceId = setting['inputDeviceId']
+    saveStateMIDISetting.pcChannel = setting['pcChannel']
+    saveStateMIDISetting.pcMSB = setting['pcMSB']
+    saveStateMIDISetting.pcLSB = setting['pcLSB']
+  }
+  // Sequence
+  for(let index = 0; index < MAX_SONG_SIZE; index++) {
+    const key = `${STORAGE_KEY_SONG}${index + 1}`
+    const song = JSON.parse(localStorage.getItem(key))
+    if(song !== null) {
+      saveStateSequencer[index].sequence = song
+    }
+  }
 }
 </script>
 
