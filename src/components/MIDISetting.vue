@@ -18,6 +18,14 @@ const props = defineProps([
 ])
 
 /**
+ * Vue Emets
+ */
+const emit = defineEmits([
+  'detect-midi',
+  'save-and-change',
+])
+
+/**
  * Vue State
  */
 const midiInputList = ref(null)
@@ -31,14 +39,6 @@ const pcLSB = ref(null)
 const errorMessage = ref("")
 const dialogError = ref(null) // DOM refs (for bootstrap)
 const disabledMIDI = ref(true)
-
-/**
- * Vue Emets
- */
-const emit = defineEmits([
-  'detect-midi',
-  'save-and-change',
-])
 
 /**
  * Vue Event

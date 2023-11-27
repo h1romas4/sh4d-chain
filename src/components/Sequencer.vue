@@ -15,6 +15,21 @@ const props = defineProps([
 ])
 
 /**
+ * Vue Emits
+ */
+const emit = defineEmits([
+  'notify-busy-state',
+  'save-and-change',
+])
+
+/**
+ * Vue Expose
+ */
+defineExpose({
+  setMIDISetting,
+});
+
+/**
  * Vue State
  */
 const isPlaying = ref(false)
@@ -31,21 +46,6 @@ const patternNoList = ref([])
 const patternScaleList = ref([])
 const sequence = reactive([])
 const saveSequence = reactive([])
-
-/**
- * Vue Emits
- */
-const emit = defineEmits([
-  'notify-busy-state',
-  'save-and-change',
-])
-
-/**
- * Vue Expose
- */
-defineExpose({
-  setMIDISetting,
-});
 
 /**
  * Vue Event
