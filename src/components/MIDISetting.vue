@@ -163,7 +163,6 @@ function onSaveChange() {
     outputChannel.value,
     pcMSB.value,
     pcLSB.value)
-  emit('detect-midi', true, "Setup is complete.")
 }
 </script>
 

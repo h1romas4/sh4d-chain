@@ -9,6 +9,7 @@ import { Toast } from 'bootstrap'
  * Vue State
  */
 const toastMessage = ref(null) // refs
+const toastMessageHead = ref(null)
 const toastMessageBody = ref(null)
 const activeTab = ref("sequencer")
 const toolTipMIDITab = ref("Detecting..")
@@ -30,11 +31,11 @@ onMounted(async () => {
  * @param {String} message
  */
 function onDetectMidi(status, message) {
+  toastMessageHead.value = "MIDI Setting"
   if(message) {
     toolTipMIDITab.value = "Connected"
-    let toast = new Toast(toastMessage.value)
     toastMessageBody.value = message
-    toast.show()
+    new Toast(toastMessage.value).show()
   }
   if(!status) {
     toolTipMIDITab.value = "MIDI API Error"
@@ -52,7 +53,7 @@ function onDetectMidi(status, message) {
  * @param {number} pcMSB
  * @param {number} pcLSB
  */
-function onSaveAndChange(outputDeviceId, inputDeviceId, pcChannel, pcMSB, pcLSB) {
+function onMIDISaveAndChange(outputDeviceId, inputDeviceId, pcChannel, pcMSB, pcLSB) {
   // send to sequencer
   if(!isBusy.value) {
     sequencer.value.setMIDISetting(
@@ -62,7 +63,23 @@ function onSaveAndChange(outputDeviceId, inputDeviceId, pcChannel, pcMSB, pcLSB)
       pcMSB,
       pcLSB
     )
+    toastMessageHead.value = "MIDI Setting"
+    toastMessageBody.value = "Setting complited"
+    new Toast(toastMessage.value).show()
   }
+}
+
+/**
+ * Vue Emets (from Sequencer)
+ *
+ * @param {*} sequence
+ */
+function onSequenceSaveAndChange(sequence) {
+  console.log(sequence)
+  toastMessageHead.value = "Sequencer"
+  // toastMessageBody.value = "Save complited"
+  toastMessageBody.value = "Sorry, not implimented yet!"
+  new Toast(toastMessage.value).show()
 }
 
 /**
@@ -90,6 +107,7 @@ function onNotifyBusyState(state) {
       <Sequencer
         ref="sequencer"
         v-on:notifyBusyState="onNotifyBusyState"
+        v-on:saveAndChange="onSequenceSaveAndChange"
       />
     </div>
   </div>
@@ -102,7 +120,7 @@ function onNotifyBusyState(state) {
       <MIDISetting
         v-bind:isBusy="isBusy"
         v-on:detectMidi="onDetectMidi"
-        v-on:saveAndChange="onSaveAndChange"
+        v-on:saveAndChange="onMIDISaveAndChange"
         defaultDeviceName="SH-4d"
       />
     </div>
@@ -113,7 +131,7 @@ function onNotifyBusyState(state) {
       <div class="toast-header">
         <!-- <i class="bi bi-lightbulb-off-fill"></i> -->
         <i class="bi bi-lightbulb-fill me-1"></i>
-        <strong class="me-auto">MIDI Device</strong>
+        <strong class="me-auto">{{ toastMessageHead }}</strong>
         <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
       </div>
       <div class="toast-body">

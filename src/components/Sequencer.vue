@@ -23,12 +23,14 @@ const patternBankList = ref([])
 const patternNoList = ref([])
 const patternScaleList = ref([])
 const sequence = reactive([])
+const saveSequence = reactive([])
 
 /**
  * Vue Emits
  */
 const emit = defineEmits([
   'notify-busy-state',
+  'save-and-change',
 ])
 
 /**
@@ -199,7 +201,10 @@ function onAddPattern() {
     now: 0,
     nextPCed: false,
   })
-  addPatternNo.value = sequence.length + 1
+  addPatternNo.value++
+  if(addPatternNo.value > 16) {
+    addPatternNo.value = defaultPattern.patternNo
+  }
 }
 
 /**
@@ -210,6 +215,20 @@ function onAddPattern() {
 function onRemovePattern(index) {
   sequence.splice(index, 1)
   addPatternNo.value = sequence.length + 1
+}
+
+/**
+ * onClear
+ */
+function onClear() {
+  sequence.splice(0, sequence.length);
+}
+
+/**
+ * onSave
+ */
+function onSave() {
+  emit("save-and-change", sequence)
 }
 
 /**
@@ -286,6 +305,42 @@ function defaultValue() {
             type="text"
             class="form-control"
             readonly>
+        </div>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="input-group mb-3">
+        <div class="input-group mb-2">
+          <button
+            v-on:click="onSave"
+            v-bind:disabled="isPlaying || sequence.length == 0"
+            class="btn btn-primary"
+            type="button">
+            <b
+              v-if="!isPlaying"
+              class="bi bi-box-arrow-up-left me-1">
+            </b>
+            Save
+          </button>
+          <button
+            v-on:click="onDebug"
+            v-bind:disabled="isPlaying || saveSequence.length == 0"
+            class="btn btn-primary"
+            type="button">
+            <b
+              v-if="!isPlaying"
+              class="bi bi-box-arrow-in-down-right">
+            </b>
+            Load
+          </button>
+          <button
+            v-bind:disabled="isPlaying || sequence.length == 0"
+            v-on:click="onClear"
+            class="btn btn-primary"
+            type="button">
+            <i class="bi bi-archive-fill"></i>
+            Clear
+          </button>
         </div>
       </div>
     </div>
