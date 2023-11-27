@@ -247,6 +247,13 @@ function onSave() {
 }
 
 /**
+ * onLoad
+ */
+ function onLoad() {
+  emit("save-and-change", sequence)
+}
+
+/**
  * onDebug
  */
 function onDebug() {
@@ -324,38 +331,76 @@ function defaultValue() {
       </div>
     </div>
     <div class="col-3">
-      <div class="input-group mb-3">
-        <div class="input-group mb-2">
-          <button
+      <div class="btn-group me-2" role="group">
+        <button
+          v-bind:disabled="isPlaying || sequence.length == 0"
+          class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown"
+          type="button">
+          <b class="bi bi-box-arrow-up-left me-1"></b>
+          Save
+        </button>
+        <ul class="dropdown-menu">
+          <li><a
             v-on:click="onSave"
-            v-bind:disabled="isPlaying || sequence.length == 0"
-            class="btn btn-primary"
-            type="button">
-            <b
-              class="bi bi-box-arrow-up-left me-1">
-            </b>
-            Save
-          </button>
-          <button
-            v-on:click="onDebug"
-            v-bind:disabled="isPlaying || saveSequence.length == 0"
-            class="btn btn-primary"
-            type="button">
-            <b
-              class="bi bi-box-arrow-in-down-right">
-            </b>
-            Load
-          </button>
-          <button
-            v-bind:disabled="isPlaying || sequence.length == 0"
-            v-on:click="onClear"
-            class="btn btn-primary"
-            type="button">
-            <i class="bi bi-archive-fill"></i>
-            Clear
-          </button>
-        </div>
+            class="dropdown-item" href="#">
+            Song 1
+          </a></li>
+          <li><a
+            v-on:click="onSave"
+            class="dropdown-item" href="#">
+            Song 2
+          </a></li>
+          <li><a
+            v-on:click="onSave"
+            class="dropdown-item" href="#">
+            Song 3
+          </a></li>
+          <li><a
+            v-on:click="onSave"
+            class="dropdown-item" href="#">
+            Song 4
+          </a></li>
+        </ul>
       </div>
+      <div class="btn-group me-2" role="group">
+        <button
+          v-bind:disabled="isPlaying"
+          class="btn btn-outline-primary outline dropdown-toggle" data-bs-toggle="dropdown"
+          type="button">
+          <b class="bi bi-box-arrow-up-left me-1"></b>
+          Load
+        </button>
+        <ul class="dropdown-menu">
+          <li><a
+            v-on:click="onLoad"
+            class="dropdown-item" href="#">
+            Song 1
+          </a></li>
+          <li><a
+            v-on:click="onLoad"
+            class="dropdown-item" href="#">
+            Song 2
+          </a></li>
+          <li><a
+            v-on:click="onLoad"
+            class="dropdown-item" href="#">
+            Song 3
+          </a></li>
+          <li><a
+            v-on:click="onLoad"
+            class="dropdown-item" href="#">
+            Song 4
+          </a></li>
+        </ul>
+      </div>
+      <button
+        v-bind:disabled="isPlaying || sequence.length == 0"
+        v-on:click="onClear"
+        class="btn btn-outline-primary"
+        type="button">
+        <i class="bi bi-archive-fill"></i>
+        Clear
+      </button>
     </div>
   </div>
   <div class="row justify-content-start">
