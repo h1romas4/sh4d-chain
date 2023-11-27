@@ -157,6 +157,17 @@ function sendSH4dPc(bank, no) {
 }
 
 /**
+ * pcFirstStep
+ *
+ * @param {*} change
+ */
+function pcFirstStep(change = true) {
+  if(sequence.length > 0 && change) {
+    sendSH4dPc(sequence[0].bank, sequence[0].no)
+  }
+}
+
+/**
  * onMIDIStart
  *
  * @param {*} event
@@ -187,6 +198,8 @@ function onMIDIStop(event) {
   isPlaying.value = false
   nowPatternIndex.value = null
   emit("notify-busy-state", isPlaying.value)
+  // waiting for SH-4d to be ready
+  setTimeout(pcFirstStep, 100)
 }
 
 /**
@@ -201,6 +214,7 @@ function onAddPattern() {
     now: 0,
     nextPCed: false,
   })
+  pcFirstStep()
   addPatternNo.value++
   if(addPatternNo.value > 16) {
     addPatternNo.value = defaultPattern.no
@@ -371,6 +385,7 @@ function defaultValue() {
           <div class="input-group-text">Pattern</div>
           <select
             v-model="seq.bank"
+            v-on:change="pcFirstStep(index == 0)"
             class="form-select">
             <option
               v-for="pattern in patternBankList"
@@ -381,6 +396,7 @@ function defaultValue() {
           <div class="input-group-text">-</div>
           <select
             v-model="seq.no"
+            v-on:change="pcFirstStep(index == 0)"
             class="form-select">
             <option
               v-for="pattern in patternNoList"
