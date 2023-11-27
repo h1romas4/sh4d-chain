@@ -317,7 +317,6 @@ function defaultValue() {
             class="btn btn-primary"
             type="button">
             <b
-              v-if="!isPlaying"
               class="bi bi-box-arrow-up-left me-1">
             </b>
             Save
@@ -328,7 +327,6 @@ function defaultValue() {
             class="btn btn-primary"
             type="button">
             <b
-              v-if="!isPlaying"
               class="bi bi-box-arrow-in-down-right">
             </b>
             Load
