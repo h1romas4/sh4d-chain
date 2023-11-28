@@ -133,6 +133,7 @@ function nextPattern(midiClock) {
     nextPatternIndex.value = nowPatternIndex.value + 1
   }
   // send program change (1step wait)
+  // It seems that at least 2 MIDI clock waits are required for program change.
   if(sequence[nowPatternIndex.value].now == 1 && !sequence[nowPatternIndex.value].nextPCed) {
     sendSH4dPc(sequence[nextPatternIndex.value].bank, sequence[nextPatternIndex.value].no)
     sequence[nowPatternIndex.value].nextPCed = true
