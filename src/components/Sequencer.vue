@@ -277,7 +277,10 @@ function onSave(index) {
   } else {
     serial = null
   }
-  emit("save-and-change", index, serial)
+  const options = {
+    "sendPCLastStep": optionSendPCLastStep.value
+  }
+  emit("save-and-change", index, serial, options)
 }
 
 /**
@@ -301,6 +304,9 @@ function onSave(index) {
         nextPCed: false,
       })
     }
+    // song options
+    const options = saveState[index].options
+    optionSendPCLastStep.value = options.sendPCLastStep
   }
   pcFirstStep()
 }
@@ -338,7 +344,7 @@ function defaultValue() {
     { name: "1/16", value: 16 },
     { name: "1/32", value: 32 },
   ]
-  optionSendPCLastStep.value = false
+  optionSendPCLastStep.value = true
 }
 </script>
 

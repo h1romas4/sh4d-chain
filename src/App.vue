@@ -42,6 +42,7 @@ onMounted(async () => {
     saveStateSequencer.push({
       name: `${STORAGE_KEY_SONG}${i + 1}`,
       sequence: null,
+      options: null,
     })
   }
   loadState()
@@ -108,7 +109,7 @@ function onMIDISaveAndChange(outputDeviceId, inputDeviceId, pcChannel, pcMSB, pc
  * @param {*} index
  * @param {*} sequence
  */
-function onSequenceSaveAndChange(index, sequence) {
+function onSequenceSaveAndChange(index, sequence, options) {
   saveStateSequencer[index].sequence = sequence
   toastMessageHead.value = "Sequencer"
   toastMessageBody.value = "Save complited."
@@ -118,8 +119,12 @@ function onSequenceSaveAndChange(index, sequence) {
   // store local storage
   if(window.localStorage) {
     const key = `${STORAGE_KEY_SONG}${index + 1}`
+    const value = {
+      sequence: sequence,
+      options: options,
+    }
     if(sequence !== null) {
-      localStorage.setItem(key, JSON.stringify(sequence));
+      localStorage.setItem(key, JSON.stringify(value));
     } else {
       localStorage.removeItem(key);
     }
@@ -154,8 +159,15 @@ function loadState() {
   for(let index = 0; index < MAX_SONG_SIZE; index++) {
     const key = `${STORAGE_KEY_SONG}${index + 1}`
     const song = JSON.parse(localStorage.getItem(key))
-    if(song !== null) {
-      saveStateSequencer[index].sequence = song
+    const sequence = song['sequence']
+    if(sequence) {
+      saveStateSequencer[index].sequence = sequence
+    } else {
+      saveStateSequencer[index].sequence = null
+    }
+    const options = song['options']
+    saveStateSequencer[index].options = {
+      "sendPCLastStep": options.sendPCLastStep ? true : false
     }
   }
 }
