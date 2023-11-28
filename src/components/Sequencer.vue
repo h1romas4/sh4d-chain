@@ -167,7 +167,7 @@ function nextPattern(midiClock) {
  */
 function sendSH4dPc(bank, no) {
   midiOutputChannel.sendControlChange(0, pcMSB) // CC0 bank select MSB 0x55
-  midiOutputChannel.sendControlChange(0x20, pcLSB) // CC32 bank select LSB 0x55
+  midiOutputChannel.sendControlChange(0x20, pcLSB) // CC32 bank select LSB 0x0
   midiOutputChannel.sendProgramChange((bank - 1) * 16 + (no - 1)) // Program change
 }
 
