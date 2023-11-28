@@ -137,7 +137,7 @@ function nextPattern(midiClock) {
   let wait
   if(optionSendPCLastStep.value) {
     // Just before the last step
-    wait = sequence[nowPatternIndex.value].step - 2
+    wait = sequence[nowPatternIndex.value].step - 3
   } else {
     // It seems that at least 2 MIDI clock waits are required for program change.
     wait = 1
