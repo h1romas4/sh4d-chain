@@ -159,6 +159,7 @@ function loadState() {
   for(let index = 0; index < MAX_SONG_SIZE; index++) {
     const key = `${STORAGE_KEY_SONG}${index + 1}`
     const song = JSON.parse(localStorage.getItem(key))
+    if(song === null) continue
     const sequence = song['sequence']
     if(sequence) {
       saveStateSequencer[index].sequence = sequence
