@@ -443,6 +443,7 @@ function defaultValue() {
         <div class="form-check form-switch">
           <input
             v-model="optionSendPCLastStep"
+            v-bind:disabled="isPlaying"
             type="checkbox"
             class="form-check-input"
             role="switch"
