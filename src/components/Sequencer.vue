@@ -41,6 +41,7 @@ const addPatternBank = ref(null)
 const addPatternNo = ref(null)
 const addPatternStep = ref(null)
 const addPatternScale = ref(null)
+const optionSendPCLastStep = ref(null)
 const patternBankList = ref([])
 const patternNoList = ref([])
 const patternScaleList = ref([])
@@ -132,9 +133,16 @@ function nextPattern(midiClock) {
   } else {
     nextPatternIndex.value = nowPatternIndex.value + 1
   }
-  // send program change (1step wait)
-  // It seems that at least 2 MIDI clock waits are required for program change.
-  if(sequence[nowPatternIndex.value].now == 1 && !sequence[nowPatternIndex.value].nextPCed) {
+  // send program change
+  let wait
+  if(optionSendPCLastStep.value) {
+    // Just before the last step
+    wait = sequence[nowPatternIndex.value].step - 2
+  } else {
+    // It seems that at least 2 MIDI clock waits are required for program change.
+    wait = 1
+  }
+  if(sequence[nowPatternIndex.value].now == wait && !sequence[nowPatternIndex.value].nextPCed) {
     sendSH4dPc(sequence[nextPatternIndex.value].bank, sequence[nextPatternIndex.value].no)
     sequence[nowPatternIndex.value].nextPCed = true
   }
@@ -330,6 +338,7 @@ function defaultValue() {
     { name: "1/16", value: 16 },
     { name: "1/32", value: 32 },
   ]
+  optionSendPCLastStep.value = false
 }
 </script>
 
@@ -422,6 +431,19 @@ function defaultValue() {
         <i class="bi bi-archive-fill"></i>
         Clear
       </button>
+    </div>
+    <div class="col-4">
+      <div class="btn-group me-2" role="group">
+        <div class="form-check form-switch">
+          <input
+            v-model="optionSendPCLastStep"
+            type="checkbox"
+            class="form-check-input"
+            role="switch"
+            id="sendPCLastStep">
+          <label class="form-check-label" for="sendPCLastStep">Send program change in the last step.</label>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row justify-content-start">
