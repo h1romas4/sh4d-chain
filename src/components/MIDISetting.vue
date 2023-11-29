@@ -4,6 +4,8 @@ import { Modal } from 'bootstrap'
 
 /**
  * External State (WEBMIDI.js Singleton)
+ *
+ * @typedef {import('webmidi').WebMidi} WebMidi
  * @type {WebMidi}
  */
 const $webmidi = getCurrentInstance().appContext.config.globalProperties.$webmidi
