@@ -3,7 +3,7 @@
 ![](https://github.com/h1romas4/sh4d-chain/workflows/Build/badge.svg)
 
 This is a simple sequencer to chain play patterns on the Roland SH-4d.
-Connect the pattern and treat it as a song.
+Connect the pattern and treat it as a song mode.
 
 It works based on the MIDI clock of SH-4d on a web browser, and It can work with other rhythm boxes by setting Program Change MSB/LSB.
 
