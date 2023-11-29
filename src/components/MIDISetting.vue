@@ -58,9 +58,11 @@ onMounted(async () => {
 })
 
 /**
- * Configure
+ * configure
+ *
+ * @param {*} reset
  */
-function configure() {
+function configure(reset = false) {
   let message = ""
   if(setDefaultSetting()) {
     const detectInput = detectDevice(
@@ -72,9 +74,16 @@ function configure() {
       midiOutputList,
       midiOutputDevice)
     if(detectInput && detectOutput) {
+      // respect component default setting
       message = "Detect Roland MIDI Device. Ready to start!"
     } else {
-      message = "Detect MIDI Device. MIDI configuration may be required."
+      message = "Detect MIDI Device."
+      // override save state
+      if(!reset && overrideSaveState()) {
+        message += "MIDI configuration loaded."
+      } else {
+        message += "MIDI configuration may be required."
+      }
     }
     disabledMIDI.value = false
     emit('save-and-change',
@@ -114,6 +123,43 @@ function setDefaultSetting() {
 }
 
 /**
+ * overrideSaveState
+ */
+function overrideSaveState() {
+  const saveState = props.saveState
+  let overrideOutputDevice = false
+  let overrideInputDevice = false
+  if(saveState.outputDeviceId !== null) {
+    overrideOutputDevice = detectDeviceId(
+      saveState.outputDeviceId,
+      midiOutputList,
+      midiOutputDevice)
+  }
+  if(saveState.inputDeviceId !== null) {
+    overrideInputDevice = detectDeviceId(
+      saveState.inputDeviceId,
+      midiInputList,
+      midiInputDevice)
+  }
+  if(saveState.pcChannel !== null
+    && Number.isInteger(saveState.pcChannel)) {
+    outputChannel.value = saveState.pcChannel
+  }
+  if(saveState.pcMSB !== null
+    && Number.isInteger(saveState.pcMSB)) {
+    pcMSB.value = saveState.pcMSB
+  }
+  if(saveState.pcLSB !== null
+    && Number.isInteger(saveState.pcLSB)) {
+    pcLSB.value = saveState.pcLSB
+  }
+  if(!(overrideOutputDevice && overrideInputDevice)) {
+    return false
+  }
+  return true
+}
+
+/**
  * Import MIDI device from Web MIDI API
  *
  * @param {WebMidi.inputs | WebMidi.outputs} devices
@@ -146,8 +192,27 @@ function importMIDIDevice(devices, list, model) {
  * @param {*} model
  */
 function detectDevice(name, list, model) {
-  let index = list.value.findIndex(device =>
+  const index = list.value.findIndex(device =>
     device.name.startsWith(name)
+  )
+  if(index == -1) {
+    return false
+  }
+  model.value = list.value[index].id
+  return true
+}
+
+/**
+ * Detect device by Id
+ *
+ * @param {*} id
+ * @param {*} list
+ * @param {*} model
+ */
+ function detectDeviceId(id, list, model) {
+  // It does not work on some platforms because the deviceid is not constant.
+  const index = list.value.findIndex(device =>
+    device.id === id
   )
   if(index == -1) {
     return false
@@ -229,7 +294,7 @@ function onSaveChange() {
   <div class="my-4 text-end">
     <button
       v-bind:disabled="disabledMIDI"
-      v-on:click="configure()"
+      v-on:click="configure(true)"
       class="btn btn-primary me-3"
       type="button">
       Reset
