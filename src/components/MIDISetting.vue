@@ -238,7 +238,7 @@ function onSaveChange() {
   <div class="alert alert-dark mb-3" role="alert">
     <p>The following settings in SH-4d will synchronize the application.</p>
     <p class="m-0 font-monospace">- SYSTEM SETTINGS - TEMPO/SYNC - Sync Out - USB</p>
-    <p class="m-0 font-monospace">- SYSTEM SETTINGS - MIDI - Ctrl Ch - 16</p>
+    <p class="m-0 font-monospace">- SYSTEM SETTINGS - MIDI - Ctrl Ch - {{ outputChannel }}</p>
   </div>
   <div class="mb-3">
     <label for="formGroupMIDI" class="form-label">MIDI Input</label>
