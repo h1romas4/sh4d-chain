@@ -11,8 +11,13 @@ It works based on the MIDI clock of SH-4d on a web browser, and It can work with
 
 ### Web Browser
 
-Requires a Chromium-based browser such as Microsoft Edge for Web MIDI API.
-(I have checked the security policy to make sure it works with Firefox)
+- Chromium-based browser such as Microsoft Edge.
+- Firfox
+
+The "Install this site as an application" feature of Microsoft Edge is useful.
+
+Safari does not work because it does not support Web MIDI API.
+Also, some web browsers running on Linux Snap may not work due to permissions.
 
 ### SH-4d Settings
 
