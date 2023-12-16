@@ -17,7 +17,6 @@ It works based on the MIDI clock of SH-4d on a web browser, and It can work with
 The "Install this site as an application" feature of Microsoft Edge is useful.
 
 Safari does not work because it does not support Web MIDI API.
-Also, some web browsers running on Linux Snap may not work due to permissions.
 
 ### SH-4d Settings
 
@@ -55,6 +54,12 @@ npm run dev
 npm run build -- --base=/sh4d-chain
 # ls -laF dist/
 ```
+
+**Linux Snap**
+
+Some web browsers running on Linux Snap may not work due to permissions.
+
+- [firefox-snap Use alsa plug to interact with MIDI devices](https://github.com/canonical/firefox-snap/commit/6790ed70ce53944d24d5b059314f697d8b42610e)
 
 ## License
 
